@@ -1,13 +1,15 @@
-from eth_tx import handle_simple_transaction
-from shamir_prime import Share, interpolate_at_zero
-import json, binascii
+from shamir_prime import *
+from eth_tx import handle_simple_transaction, get_address
+import json, binascii, os
 
 '''
 NOTE: MUST SET INFURA PROVIDER THROUGH ENVIRONMENT VARIABLES FOR THESE SCRIPTS TO WORK
 
 ETH_NETWORK:  must be ropsten or mainnet
-INFURA_API_KEY: must be an infura project id
+INFURA_API_KEY: must be a valid infura project id
 '''
+
+HOME = str(os.path.expanduser("~"))
 
 def send_ether(keyshard_filepaths, amount_ether, receiver_address, gas_price_gwei):
 	shares = []
@@ -35,3 +37,13 @@ def send_ether(keyshard_filepaths, amount_ether, receiver_address, gas_price_gwe
 	txh = handle_simple_transaction(sk, amount_ether, receiver_address, gas_price_gwei)
 	return binascii.hexlify(txh).decode()
 
+def generate_new_account(id_string, threshold, n_shares, output_dir=HOME):
+	skint = rand_int()
+	shares = make_shares(threshold, n_shares, skint)
+	for s in shares:
+		j = {"ID": id_string, "Algorithm": "SHAMIR-PRIME", "Index": s.x, "Value": s.y, "Prime": SECP256K1, "Threshold": threshold}
+		fpath = os.path.join(output_dir, f'{s.x}-{id_string}.json')
+		with open(fpath, "w") as f:
+			json.dump(j, f, indent=4)
+	addr = get_address(hex(skint)[2:])
+	return addr

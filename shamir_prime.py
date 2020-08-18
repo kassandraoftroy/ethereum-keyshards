@@ -1,6 +1,5 @@
 from secrets import randbelow
 
-LARGE_PRIME = int("".join(["1" for _ in range(317)]))
 SECP256K1 = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141
 
 class Share:
@@ -25,7 +24,7 @@ class Share:
 		return f"({self.x}, {self.y})"
 
 
-def make_shares(threshold, n_parties, secret, prime=LARGE_PRIME):
+def make_shares(threshold, n_parties, secret, prime=SECP256K1):
 	assert threshold+1 <= n_parties, "cannot require more shares than number of parties for reconstruction"
 	assert secret < prime, "secret cannot be larger than prime modulus"
 	coefficients = [secret] + [__randrange(1, prime) for _ in range(threshold)]
@@ -69,6 +68,9 @@ def mod_inv(x, p):
 		q = - (p // z)
 		z, a = (p + q * z), (q * a) % p
 	return a
+
+def rand_int(prime=SECP256K1):
+	return __randrange(1, prime-1)
 
 def prod(nums):
 	return reduce(mul, nums, 1)
