@@ -1,6 +1,6 @@
-# keyshards
+# ethereum-keyshards
 
-This is a simple python package for generating sharded ethereum accounts where a certain number of shards are needed to reconstruct the account's private key. We use Shamir Secret Share over a prime ring so that shards reveal no information about the underlying key until more than the threshold of shards are brought together. 
+This is a simple python package for generating sharded ethereum accounts where a certain number of shards are needed to reconstruct the account's private key. We use Shamir Secret Sharing over a prime ring so that shards reveal no information about the underlying key until more than a specified threshold number of shards are brought together. 
 
 Keyshard files can be input directly into a process that unlocks the key and spends ether so that no party is ever required to see or manipulate the underlying private key.
 
