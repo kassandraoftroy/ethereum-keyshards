@@ -1,6 +1,7 @@
+#!/usr/bin/python3
 from shamir_prime import *
 from eth_tx import handle_simple_transaction, get_address
-import json, binascii, os
+import json, binascii, os, sys
 
 '''
 NOTE: MUST SET INFURA PROVIDER THROUGH ENVIRONMENT VARIABLES FOR THESE SCRIPTS TO WORK
@@ -11,7 +12,7 @@ INFURA_API_KEY: must be a valid infura project id
 
 HOME = str(os.path.expanduser("~"))
 
-def send_ether(keyshard_filepaths, amount_ether, receiver_address, gas_price_gwei):
+def getKey(keyshard_filepaths):
 	shares = []
 	threshold = None
 	id_check = None
@@ -33,8 +34,11 @@ def send_ether(keyshard_filepaths, amount_ether, receiver_address, gas_price_gwe
 		raise ValueError("Not enough keyshards submitted!")
 
 	secret_int = interpolate_at_zero(shares)
-	sk = hex(secret_int)[2:]
-	txh = handle_simple_transaction(sk, amount_ether, receiver_address, gas_price_gwei)
+	return hex(secret_int)
+
+def send_ether(keyshard_filepaths, amount_ether, receiver_address, gas_price_gwei):
+	sk = getKey(keyshard_filepaths)
+	txh = handle_simple_transaction(sk[2:], amount_ether, receiver_address, gas_price_gwei)
 	return binascii.hexlify(txh).decode()
 
 def generate_new_account(id_string, threshold, n_shares, output_dir=HOME):
@@ -47,3 +51,7 @@ def generate_new_account(id_string, threshold, n_shares, output_dir=HOME):
 			json.dump(j, f, indent=4)
 	addr = get_address(hex(skint)[2:])
 	return addr
+
+if __name__=='__main__':
+	paths = sys.argv[1:]
+	print(getKey(paths))

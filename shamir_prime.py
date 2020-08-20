@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from secrets import randbelow
 
 SECP256K1 = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141
@@ -80,6 +81,6 @@ def gcd(a, b):
 		a, b = b, a % b
 	return a
 
-# cryptographically secure random number in a given range
+# cryptographically secure random number generation in a given range
 def __randrange(lower, upper):
 	return randbelow(upper-lower)+lower
