@@ -10,16 +10,14 @@ def get_address(priv_hex):
     return w3.eth.account.privateKeyToAccount(priv_hex).address
 
 def handle_transaction(txn_func, *args, **kwargs):
-    """Handles a transaction that updates the contract state by locally
-    signing, building, sending the transaction and returning a transaction
-    receipt.
+    """Handles a transaction that updates contract state by locally
+    signing, building, sending the transaction and returning a transaction hash
 
-    >>> gas = 4712388
-    >>> hmtoken_contract = get_hmtoken()
-    >>> txn_func = hmtoken_contract.functions.transfer
-    >>> func_args = [job.job_contract.address, hmt_amount]
+    >>> gas = 4712388 (in WEI)
+    >>> txn_func = erc20_contract.functions.transfer
+    >>> func_args = [receiver_address, token_amount]
     >>> txn_info = {
-    ... "gas_payer_priv": job.gas_payer_priv,
+    ... "gas_payer_priv": gas_payer_priv,
     ... "gas": gas
     ... }
     >>> txn_hash = handle_transaction(txn_func, *func_args, **txn_info)

@@ -45,7 +45,7 @@ NOTE: It takes `threshold+1` shares to be able to reconstruct the key. The code 
 Once you've collected enough keyshards to control the account you can send ether in one simple command:
 
 ```
->>> from keyshards import generate_new_account
+>>> from keyshards import send_ether
 >>> shard_filepaths = ['path/to/first/shard', 'path/to/second/shard', ...]
 >>> amount_eth = 1.0
 >>> gas_price_gwei = 50
